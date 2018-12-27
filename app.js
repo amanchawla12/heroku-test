@@ -25,4 +25,4 @@ app.listen(process.env.PORT || 9100, function() {
 });
 
 app.post('/rabbit_pub', rabbit.publish);
-app.post('/rabbit_subs', rabbit.listen);
+rabbit.listen(1);

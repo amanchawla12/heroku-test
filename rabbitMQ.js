@@ -21,17 +21,19 @@ exports.publish = function publish(req, res) {
     });
 }
 
-exports.listen = function listen(req, res) {
+exports.listen = function listen(counter) {
     amqp.connect('amqp://xbqpeznb:MBDwn3EZmgxvsKgdFd7HhkIb6s3Xq0Ht@bear.rmq.cloudamqp.com/xbqpeznb', function(err, conn) {
         if(err) {
             console.error(JSON.stringify(err));
-            return res.send(err);
+            if(counter < 5) {
+                listen(counter + 1);
+            }
+            return;
         }
         conn.createChannel(function(err, ch) {
             ch.consume('EnablePAD', function(msg) {
                 console.error("message from rabbit: " + msg.content.toString());
                 ch.ack(msg);
-                return res.send("done");
             })
         })
     })
