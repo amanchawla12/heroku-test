@@ -1,6 +1,10 @@
+
+
 const express           = require('express');
-const postgres          = require('./postgres');
 const app               = express();
+
+const postgres          = require('./postgres');
+const rabbit            = require('./rabbitMQ');
 
 app.get('/ping', function(req, res) {
     return res.send('pong');
@@ -19,3 +23,6 @@ app.get('/heartbeat', function(req, res) {
 app.listen(process.env.PORT || 9100, function() {
     console.log('server listening on ' + process.env.PORT || 9100);
 });
+
+app.post('/rabbit_pub', rabbit.publish);
+app.post('/rabbit_subs', rabbit.listen);
